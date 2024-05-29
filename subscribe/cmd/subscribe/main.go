@@ -95,7 +95,8 @@ func setupLogger(env string) *slog.Logger {
 		log = slog.New(
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}),
 		)
-	default: // If env config is invalid, set prod settings by default due to security
+	// Если env config неверен, установите настройки prod по умолчанию из соображений безопасности
+	default: 
 		log = slog.New(
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}),
 		)

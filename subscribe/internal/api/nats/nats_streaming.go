@@ -26,19 +26,18 @@ func MessageHandlerFunc(cash map[string]post.Order, pg *post.Postgres) stan.MsgH
 		err := json.Unmarshal(m.Data, &order)
 
 		if err != nil {
-			log.Print("Error to saveOrder", err)
+			log.Print("Error to saveOrder json of nats data", err)
 			return
 		}
-
-		cash[order.Order_uid] = order
-		//Log
 
 		err = pg.CreateOrder(context.Background(), order)
 		if err != nil {
-			log.Print("")
+			log.Print("Error to saveOrder db createOrder", err, order.Customer_id)
 			return
 		}
+		log.Print("Order add to db:", order.Customer_id)
+
+		cash[order.Order_uid] = order
+		log.Print("Order add to cash:", order.Customer_id)
 	}
 }
-
-
