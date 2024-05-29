@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"pub/internal/app/nats"
 	"pub/internal/entity"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -12,7 +13,7 @@ import (
 func main() {
 
 	clusterID := "test-cluster"
-	clientID :=  uuid.NewString()
+	clientID := uuid.NewString()
 	natsURL := "nats://localhost:4222"
 
 	// Подключение к NATS Streaming Server
@@ -21,11 +22,10 @@ func main() {
 
 	for i := 0; i < 20; i++ {
 
-
 		jsonOrder := GetOrder()
 
 		if i == 0 {
-			jsonOrder.Order_uid = "text"	
+			jsonOrder.Order_uid = "text"
 		}
 
 		order, _ := json.Marshal(jsonOrder)
@@ -33,9 +33,6 @@ func main() {
 		err := sc.Publish("createOrder", order)
 		fmt.Print(err)
 	}
-
-	a := 5
-	fmt.Print(a)
 }
 
 func GetOrder() entity.Order {
@@ -98,14 +95,7 @@ func GetOrder() entity.Order {
 	orderBase.Order_uid = uuid.NewString()
 
 	orderBase.Sm_id = 1000
+	orderBase.Date_created = time.Now()
 
 	return orderBase
 }
-
-/*
-
-clusterID : "test-cluster"
-clientID : "test-client"
-natsURL : "nats://localhost:4222"
-
-*/
