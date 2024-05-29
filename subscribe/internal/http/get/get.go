@@ -32,13 +32,13 @@ func New(ctx context.Context, log *slog.Logger, cash map[string]post.Order, orde
 		order_uid := r.URL.Query().Get("id")
 
 		if order_uid == "" {
-			log.Info("id empty")
+			log.Info("id empty in url")
 			http.Error(w, "id empty", http.StatusBadRequest)
 			return
 		}
 
 		if orderCash, ok := cash[order_uid]; ok {
-			log.Info("Good get order")
+			log.Info("get order at cash", "id", orderCash.Order_uid)
 			responseOK(w, r, orderCash)
 			return
 		}
@@ -46,7 +46,7 @@ func New(ctx context.Context, log *slog.Logger, cash map[string]post.Order, orde
 		orderDB, err := orderGetter.GetOrder(ctx, order_uid)
 
 		if err != nil {
-			log.Info("Not id at %s", order_uid)
+			log.Info("Not id", "id", orderDB.Order_uid)
 			http.Error(w, "id not", http.StatusBadRequest)
 			return
 		}

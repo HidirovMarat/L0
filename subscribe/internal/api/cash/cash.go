@@ -3,6 +3,7 @@ package cash
 import (
 	"context"
 	"fmt"
+	"log"
 	"sub/internal/storage/post"
 )
 
@@ -16,11 +17,11 @@ func New(ctx context.Context, pg *post.Postgres) (map[string]post.Order, error) 
 
 	if orders == nil {
 		return cash, nil
-	} 
+	}
 
 	for _, order := range *orders {
 		cash[order.Order_uid] = order
 	}
-
+	log.Print("good cash")
 	return cash, nil
 }
